@@ -1,4 +1,3 @@
-// continue from the video 6/
 const express = require('express');
 // morgan -> logging third party library
 const morgan = require('morgan');
