@@ -7,13 +7,19 @@ const userRouter = require('./routes/userRoutes');
 
 // initiate express app
 const app = express();
-// morgan middleware
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'development') {
+  // morgan middleware
+  app.use(morgan('dev'));
+}
+
 // express middleware
 app.use(express.json()); // to get the data from the req body
+//serve static file
+app.use(express.static(`${__dirname}/public`));
 // custom middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  // console.log(req.requestTime);
   next();
 });
 // routing middleware
