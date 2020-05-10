@@ -77,7 +77,14 @@ app.use(
 
 //serve static file
 // app.use(express.static(`${__dirname}/public`));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+  express.static(path.join(__dirname, 'public'), {
+    cacheControl: true,
+    setHeaders: res => {
+      res.set('Cache-Control', 'public', 'max-age=300, s-maxage=600');
+    }
+  })
+);
 
 // compression for text base replt
 app.use(compression());
