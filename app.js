@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 // morgan -> logging third party library
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -74,6 +75,9 @@ app.use(
 //serve static file
 // app.use(express.static(`${__dirname}/public`));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// compression for text base replt
+app.use(compression());
 
 // custom middleware
 app.use((req, res, next) => {
