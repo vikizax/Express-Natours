@@ -19,6 +19,8 @@ const globalErrorHandler = require('./controllers/errorController');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const bookingController = require('./controllers/bookingController');
+
 // initiate express app
 const app = express();
 
@@ -49,7 +51,6 @@ if (process.env.NODE_ENV === 'development') {
 //   origin: 'https://www.something.com'
 // }))
 
-
 // set security http headers
 app.use(helmet());
 
@@ -60,6 +61,15 @@ const limiter = rateLimit({
   message: 'To many request from this IP, please try again in an hour'
 });
 app.use('/api', limiter);
+
+// stripe web hook
+app.post(
+  '/webhook-checkout',
+  express.raw({
+    type: 'application/json'
+  }),
+  bookingController.webhookCheckout
+);
 
 // express middleware
 // to get the data from the req body
