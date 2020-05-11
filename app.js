@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 // morgan -> logging third party library
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -29,11 +30,25 @@ app.set('view engine', 'pug'); // ->-> res.render()
 // set views folder
 app.set('views', path.join(__dirname, 'views'));
 
+// implement cors
+app.use(cors()); // Access-Control-Allow-Origin *
+
+// allow cors on all option for all routes
+app.options('*', cors());
+
+// app.options('/api/v1/tours:id', cors());
+
 // developer logging
 if (process.env.NODE_ENV === 'development') {
   // morgan middleware
   app.use(morgan('dev'));
 }
+
+// origin specific cors
+// app.use(cors({
+//   origin: 'https://www.something.com'
+// }))
+
 
 // set security http headers
 app.use(helmet());
@@ -96,6 +111,7 @@ app.use((req, res, next) => {
 });
 // routing middleware
 app.use('/', viewRouter); // use the viewRouter middleware
+// app.use('/api/v1/tours', cors(), tourRouter); // use the tourRouter middleware
 app.use('/api/v1/tours', tourRouter); // use the tourRouter middleware
 app.use('/api/v1/users', userRouter); // use the userRouter middleware
 app.use('/api/v1/reviews', reviewRouter); // use the reviewRouter middleware
