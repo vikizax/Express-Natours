@@ -4,7 +4,7 @@ const viewController = require('../controllers/viewController');
 
 const authController = require('../controllers/authController');
 
-const bookingController = require('../controllers/bookingController');
+// const bookingController = require('../controllers/bookingController');
 
 const router = Router();
 
