@@ -3,3 +3,5 @@
   
 # Start Server
   `npm start`
+# Test Account
+  user id- laura@example.com , password- test1234
