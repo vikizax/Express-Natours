@@ -65,9 +65,7 @@ app.use('/api', limiter);
 // stripe web hook
 app.post(
   '/webhook-checkout',
-  express.raw({
-    type: 'application/json'
-  }),
+  express.raw({ type: 'application/json' }),
   bookingController.webhookCheckout
 );
 
