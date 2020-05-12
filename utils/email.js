@@ -1,5 +1,6 @@
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 const htmlToText = require('html-to-text');
+const sgMail = require('@sendgrid/mail');
 const pug = require('pug');
 
 module.exports = class Email {
@@ -10,27 +11,27 @@ module.exports = class Email {
     this.from = `Vivek Chetia <${process.env.EMAIL_FROM}>`;
   }
 
-  newTransport() {
-    if (process.env.NODE_ENV === 'production') {
-      // Sendgrid
-      return nodemailer.createTransport({
-        service: 'SendGrid',
-        auth: {
-          user: process.env.SEND_GRID_USERNAME,
-          pass: process.env.SEND_GRID_PASSWORD
-        }
-      });
-    }
+  // newTransport() {
+  //   if (process.env.NODE_ENV === 'production') {
+  //     // Sendgrid
+  //     return nodemailer.createTransport({
+  //       service: 'SendGrid',
+  //       auth: {
+  //         user: process.env.SEND_GRID_USERNAME,
+  //         pass: process.env.SEND_GRID_PASSWORD
+  //       }
+  //     });
+  //   }
 
-    return nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD
-      }
-    });
-  }
+  //   return nodemailer.createTransport({
+  //     host: process.env.EMAIL_HOST,
+  //     port: process.env.EMAIL_PORT,
+  //     auth: {
+  //       user: process.env.EMAIL_USERNAME,
+  //       pass: process.env.EMAIL_PASSWORD
+  //     }
+  //   });
+  // }
 
   // send the actual email
   async send(template, subject) {
@@ -40,6 +41,7 @@ module.exports = class Email {
       url: this.url,
       subject
     });
+
     // define the email option
     const emailOptions = {
       from: 'Vivek Chetia <vikichet@gmail.com>',
@@ -59,7 +61,13 @@ module.exports = class Email {
     // });
 
     // create a transport and send email
-    await this.newTransport().sendMail(emailOptions);
+    // await this.newTransport().sendMail(emailOptions);
+
+    // set sendgrid apikey
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+    // send mail
+    await sgMail.send(emailOptions);
   }
 
   async sendWelcome() {
